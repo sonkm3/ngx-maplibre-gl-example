@@ -2,7 +2,7 @@
 Build the docker image, then install node_modules.
 ```
 docker build -t mapapp .
-docker run -it -v ./:/app/mapapp -p 4200:4200 mapapp yarn
+docker run -it -v ./:/app/mapapp -p 4200:4200 -w /app/mapapp mapapp yarn
 ```
 
 ### Run dev server
