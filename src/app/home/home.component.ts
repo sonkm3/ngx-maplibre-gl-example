@@ -19,11 +19,26 @@ import {
 
 @Injectable({providedIn: 'root'})
 export class HomeComponent {
-
+  worker: Worker;
   constructor(private http: HttpClient) {
+
+    if (typeof Worker !== 'undefined') {
+      this.worker = new Worker(new URL('../place.worker', import.meta.url));
+
+      this.worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+
+      // worker.postMessage('hello');
+    } else {
+      console.log('Web Workers are not supported in this environment.');
+    }
+
+
     http.get('./tokyo.place.mini.geo.json').subscribe(place => {
       const data = place as GeoJSON.FeatureCollection<GeoJSON.Point>;
-      console.log(data.features);
+      // console.log(data.features);
+      this.worker.postMessage(data);
     });
   }
 
